@@ -7,6 +7,9 @@ from datetime import datetime, timedelta
 from googlesearch import search
 import shutil
 import pickle
+from dotenv import load_dotenv
+
+load_dotenv()
 
 whitelist = []
 
@@ -88,8 +91,7 @@ if not os.path.exists(blacklist_filename):
     with open(blacklist_filename, 'wb') as f:
         pickle.dump(blacklist, f)
 
-
-os.environ["OPENAI_API_KEY"] = "sk--ux-UbzKqCTCxNVsSx8Z4ZBr5FQTxdgSXyXAm7hptMT3BlbkFJWj9-34ypfUmZtPQ6cnAc49X7RndZX5zHgjg2ClmZUA"
+os.environ["OPENAI_API_KEY"] = os.getenv("API_TOKEN")
 client = OpenAI()
 i = 0
 weburl  = search_website(i)
@@ -120,7 +122,7 @@ image_url = image_creation(title)
 
 response = requests.get(image_url, stream=True)
 
-with open(f'C:/Users/aydan/newblog/content/posts/{file_name}.jpg', 'wb') as out_file:
+with open(f'newblog/content/posts/{file_name}.jpg', 'wb') as out_file:
     shutil.copyfileobj(response.raw, out_file)
 
 del response

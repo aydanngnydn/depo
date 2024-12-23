@@ -82,6 +82,15 @@
             border-radius: 5px;
         }
 
+        #comment {
+            width: 13%;
+            border: 0.5px solid #96865f;
+            background: #E8E8E8;
+            padding: 10px;
+            margin-top: 1px;
+            border-radius: 5px;
+        }
+
         #commentInput {
             width: 100%;
             border: none;
@@ -90,13 +99,22 @@
             border-radius: 5px;
             margin-top: 15px;
         }
+        #nameInput {
+            width: 20%;
+            border: none;
+            background: #E8E8E8;
+            padding: 0px;
+            border-radius: 5px;
+            margin-top: 1px;
+        }
     </style>
 </head>
 
 <body>
 
     <textarea id="commentInput" placeholder="Leave a comment..."></textarea>
-    <button onclick="saveComment()">Comment</button>
+    <textarea id="nameInput" placeholder="Your name here:"></textarea>
+    <button id="comment" onclick="saveComment()">Comment</button>
 
     <div id="commentList"></div>
 
@@ -118,10 +136,13 @@
 
         function saveComment() {
             const userComment = document.getElementById("commentInput").value;
-            items.push(userComment);
+            const userName = document.getElementById("nameInput").value;
+            const timestamp = new Date().toLocaleString();
+            items.push({userComment, userName, timestamp});
             localStorage.setItem(pageKey, JSON.stringify(items));
             displayComments();
             document.getElementById("commentInput").value = "";
+            document.getElementById("nameInput").value = "";
         }
 
         function displayComments() {
@@ -133,7 +154,7 @@
             comments.forEach(comment => {
                 const commentDiv = document.createElement("div");
                 commentDiv.className = "comment";
-                commentDiv.textContent = comment;
+                commentDiv.textContent = `${comment.userName}: ${comment.userComment} (Posted on: ${comment.timestamp})`;
                 commentListDiv.appendChild(commentDiv);
             });
 
@@ -143,7 +164,8 @@
             const postId = getPostId();
             const response = await fetch(`http://localhost:5000/api/comments/posts/${postId}`);
             const apiComment = await response.json();
-            items.push(apiComment.comment);
+            const timestamp = new Date().toLocaleString();
+            items.push(apiComment.comment, apiComment.userName, timestamp);
             localStorage.setItem(pageKey, JSON.stringify(items));
           
             displayComments();

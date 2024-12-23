@@ -3,6 +3,9 @@ import random
 from openai import OpenAI
 import os
 from flask_cors import CORS
+from dotenv import load_dotenv
+
+load_dotenv()
 
 app = Flask(__name__)
 CORS(app)
@@ -21,7 +24,7 @@ def generateComment(post_id):
     
     file = f"newblog/content/posts/{post_id}.md"
     content = get_content(file)
-    os.environ["OPENAI_API_KEY"] = "sk--ux-UbzKqCTCxNVsSx8Z4ZBr5FQTxdgSXyXAm7hptMT3BlbkFJWj9-34ypfUmZtPQ6cnAc49X7RndZX5zHgjg2ClmZUA"
+    os.environ["OPENAI_API_KEY"] = os.getenv("API_TOKEN")
     client = OpenAI()
   
     

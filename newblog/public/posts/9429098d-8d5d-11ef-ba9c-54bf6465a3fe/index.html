@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html class="html" lang="en-us" dir="ltr">
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+<title> | My New Hugo Site</title>
+<link rel="icon" href="/favicon.ico" />
+
+<meta property="og:url" content="http://localhost:1313/posts/9429098d-8d5d-11ef-ba9c-54bf6465a3fe/">
+  <meta property="og:site_name" content="My New Hugo Site">
+  <meta property="og:title" content="My New Hugo Site">
+  <meta property="og:locale" content="en_us">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+
+
+  <meta itemprop="name" content="My New Hugo Site">
+
+
+    <link rel="stylesheet" href="/css/style.css">
+
+
+
+
+</head>
+<body class="body">
+  <header class="header">
+    
+  <nav class="menu language">
+    <ul class="menu__list language__list">
+</ul>
+  </nav>
+
+  </header>
+  <main class="main">
+    
+  <h1></h1>
+  
+  <time class="published-date" datetime="0001-01-01T00:00:00&#43;00:00">0001-01-01</time>
+  
+
+  
+
+
+
+
+  
+  
+
+  
+
+  
+  <nav class="page-nav">
+      <a class="page-nav__previous-link" href="/posts/8f7ff85f-7a81-11ef-abc8-54bf6465a3fe/">Prev: The Need for Centralized Data in AI Strategies</a>
+      <a class="page-nav__next-link" href="/posts/b8e71d94-8d5c-11ef-9ccf-54bf6465a3fe/">Next: </a>
+  </nav>
+
+  <!DOCTYPE html>
+<html>
+
+<head>
+    <style>
+        .comment {
+            width: 100%;
+            border: 0.5px solid #96865f;
+            background: #E8E8E8;
+            padding: 10px;
+            margin-top: 15px;
+            border-radius: 5px;
+        }
+
+        #comment {
+            width: 13%;
+            border: 0.5px solid #96865f;
+            background: #E8E8E8;
+            padding: 10px;
+            margin-top: 1px;
+            border-radius: 5px;
+        }
+
+        #commentInput {
+            width: 100%;
+            border: none;
+            background: #E8E8E8;
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 15px;
+        }
+        #nameInput {
+            width: 20%;
+            border: none;
+            background: #E8E8E8;
+            padding: 0px;
+            border-radius: 5px;
+            margin-top: 1px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <textarea id="commentInput" placeholder="Leave a comment..."></textarea>
+    <textarea id="nameInput" placeholder="Your name here:"></textarea>
+    <button id="comment" onclick="saveComment()">Comment</button>
+
+    <div id="commentList"></div>
+
+    <script>
+        const pageKey = `${getPageIdentifier()}`;
+        let items = [];
+
+        function getPageIdentifier() {
+            const path = window.location.pathname;
+            return `${path}`;
+        }
+
+        function getPostId() {
+            const path = window.location.pathname; 
+            const segments = path.split('/'); 
+            const postId = segments[segments.length - 2]; 
+            return postId;
+        }
+
+        function saveComment() {
+            const userComment = document.getElementById("commentInput").value;
+            const userName = document.getElementById("nameInput").value;
+            const timestamp = new Date().toLocaleString();
+            items.push({userComment, userName, timestamp});
+            localStorage.setItem(pageKey, JSON.stringify(items));
+            displayComments();
+            document.getElementById("commentInput").value = "";
+            document.getElementById("nameInput").value = "";
+        }
+
+        function displayComments() {
+            const comments = JSON.parse(localStorage.getItem(pageKey)) || [];
+            items = comments;
+
+            const commentListDiv = document.getElementById("commentList");
+            commentListDiv.innerHTML = "";
+            comments.forEach(comment => {
+                const commentDiv = document.createElement("div");
+                commentDiv.className = "comment";
+                commentDiv.textContent = `${comment.userName}: ${comment.userComment} (Posted on: ${comment.timestamp})`;
+                commentListDiv.appendChild(commentDiv);
+            });
+
+        }
+
+        async function fetchComments() {
+            const postId = getPostId();
+            const response = await fetch(`http://localhost:5000/api/comments/posts/${postId}`);
+            const apiComment = await response.json();
+            const timestamp = new Date().toLocaleString();
+            items.push(apiComment.comment, apiComment.userName, timestamp);
+            localStorage.setItem(pageKey, JSON.stringify(items));
+          
+            displayComments();
+        }
+
+        window.onload = function() {
+        displayComments();
+        fetchComments();
+    };
+
+    </script>
+
+</body>
+
+</html>
+
+  </main>
+  <footer class="footer">
+    
+<p class="footer__copyright-notice">&copy; 2024 </p>
+<p class="footer__theme-info">Built with <a href='https://gohugo.io'>Hugo</a> and <a href='https://github.com/CyrusYip/hugo-theme-yue'>Yue</a></p>
+  </footer>
+</body>
+</html>
